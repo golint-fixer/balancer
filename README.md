@@ -2,6 +2,9 @@
 
 Simple, generic, domain-agnostic balancing algorithms for vinxi.
 
+Currently provides `random` and `roundrobin` distribution algorithms. 
+New algorithms may be added in the future.
+
 ## Installation
 
 ```bash
@@ -13,6 +16,8 @@ go get -u gopkg.in/vinxi/balancer.v0
 See [godoc](https://godoc.org/github.com/vinxi/balancer) reference.
 
 ## Example
+
+#### Round-robin balancing
 
 ```go
 package main
@@ -30,6 +35,37 @@ func main() {
   }
 
   lb := balancer.NewRoundRobin()
+
+  for i := 0; i < 9; i++ {
+    fmt.Println("Next balance round...")
+    server, err := lb.Balance(servers)
+    if err != nil {
+      fmt.Printf("Error: %s\n", err)
+      return
+    }
+    fmt.Printf("Next target server: %s\n", server)
+  }
+}
+```
+
+#### Random balancing
+
+```go
+package main
+
+import (
+  "fmt"
+  "gopkg.in/vinxi/balancer.v0"
+)
+
+func main() {
+  servers := []string{
+    "http://1.server.com",
+    "http://2.server.com",
+    "http://3.server.com",
+  }
+
+  lb := balancer.NewRandom()
 
   for i := 0; i < 9; i++ {
     fmt.Println("Next balance round...")
