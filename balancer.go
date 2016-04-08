@@ -59,7 +59,7 @@ func (b *ProxyBalancer) OnError(handler ErrorHandler) {
 }
 
 // Register registers the middleware.
-func (b *ProxyBalancer) Register(mw layer.Pluggable) {
+func (b *ProxyBalancer) Register(mw layer.Middleware) {
 	mw.UsePriority("request", layer.Head, b.BalanceHTTP)
 }
 
